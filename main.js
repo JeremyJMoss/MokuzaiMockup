@@ -112,18 +112,44 @@ const products = [
     productName: "Cherry Wood Graph 3-Pack",
     cost: 10.0,
   },
+  {
+    image: "images/laptopStand.jpg",
+    imageDescription: "A stand for a laptop made of wood",
+    productName: "Maple Laptop Riser",
+    cost: 150.0,
+  },
+  {
+    image: "images/blueDeskPad.jpg",
+    imageDescription: "A non-stick desk pad matte blue in colour",
+    productName: "Matte Desk Pad (Medium Plus / Navy)",
+    cost: 60.0,
+  },
+  {
+    image: "images/brass_pen.jpg",
+    imageDescription: "Black and walnut pen stand",
+    productName: "Black and Walnut Pen Stand Set",
+    cost: 100.0,
+  },
+  {
+    image: "images/walnut_desk_shelf.jpg",
+    imageDescription:
+      "Walnut desk shelf with two tv's next to each other on top of the shelf",
+    productName: "Walnut Desk Shelf",
+    cost: 220.0,
+  },
+  {
+    image: "images/desk_tray.jpg",
+    imageDescription: "Desk tray with miscellaneous items in each section",
+    productName: "Desk Organizer Tray",
+    cost: 120.0,
+  },
 ];
 
-const ADDANDREMOVECLASS = function (arr) {
-  for (let keys of arr.keys()) {
-    arr[keys].addEventListener("click", function (e) {
-      e.preventDefault();
-      for (let i = 0; i < arr.length; i++) {
-        arr[i].classList.remove("selected");
-      }
-      arr[keys].classList.add("selected");
-    });
+const ADDCLASS = function (arr, index) {
+  for (let i = 0; i < arr.length; i++) {
+    arr[i].classList.remove("selected");
   }
+  arr[index].classList.add("selected");
 };
 
 const displayProductItems = function (productArr, startIndex, finalIndex) {
@@ -141,6 +167,17 @@ const displayProductItems = function (productArr, startIndex, finalIndex) {
   gridContainer.innerHTML = displayProducts;
 };
 
-ADDANDREMOVECLASS(TOPLINKS);
-ADDANDREMOVECLASS(BOTTOMLINKS);
 displayProductItems(products, 0, 16);
+BOTTOMLINKS[0].addEventListener("click", function (e) {
+  e.preventDefault();
+  ADDCLASS(BOTTOMLINKS, 0);
+  gridContainer.innerHTML = "";
+  displayProductItems(products, 0, 16);
+});
+
+BOTTOMLINKS[1].addEventListener("click", function (e) {
+  e.preventDefault();
+  ADDCLASS(BOTTOMLINKS, 1);
+  gridContainer.innerHTML = "";
+  displayProductItems(products, 16, 32);
+});
