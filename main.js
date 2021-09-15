@@ -1,9 +1,10 @@
 "use strict";
-
+/*Dom elements collection*/
 const TOPLINKS = document.querySelectorAll(".topLink");
 const BOTTOMLINKS = document.querySelectorAll(".bottomLink");
 const gridContainer = document.querySelector(".gridContainer");
 
+/*object immitating an api*/
 const products = [
   {
     image: "images/walnut_speakers.png",
@@ -143,8 +144,48 @@ const products = [
     productName: "Desk Organizer Tray",
     cost: 120.0,
   },
+  {
+    image: "images/walnut_wrist_pad.jpg",
+    imageDescription: "Wrist pad made of walnut with a keyboard above it",
+    productName: "Leather & Walnut Keyboard Wrist Pad",
+    cost: 100.0,
+  },
+  {
+    image: "images/leather_coaster_set.jpg",
+    imageDescription: "Coaster set made of tan coloured leather",
+    productName: "Tan Leather Coaster Set",
+    cost: 30.0,
+  },
+  {
+    image: "images/leather_mouse_pad.jpg",
+    imageDescription: "Black leather mouse pad with wireless mouse in middle",
+    productName: "Black Leather Mouse Pad (Large)",
+    cost: 60.0,
+  },
 ];
 
+if (products.length < 16) {
+  for (let i = 1; i < BOTTOMLINKS.length; i++) {
+    BOTTOMLINKS[i].style.display = "none";
+  }
+} else if (products.length < 32) {
+  for (let i = 2; i < BOTTOMLINKS.length; i++) {
+    BOTTOMLINKS[i].style.display = "none";
+  }
+} else if (products.length < 32) {
+  for (let i = 3; i < BOTTOMLINKS.length; i++) {
+    BOTTOMLINKS[i].style.display = "none";
+  }
+}
+
+/*creating a low price first array from a copy of original array*/
+
+const lowPriceFirstProducts = [...products].sort((a, b) => a.cost - b.cost);
+
+/*creating a high price first array from a copy of original array*/
+const highPriceFirstProducts = [...products].sort((a, b) => b.cost - a.cost);
+
+/*add and remove class from all others*/
 const ADDCLASS = function (arr, index) {
   for (let i = 0; i < arr.length; i++) {
     arr[i].classList.remove("selected");
@@ -152,6 +193,7 @@ const ADDCLASS = function (arr, index) {
   arr[index].classList.add("selected");
 };
 
+/* function taking an array that returns a grid item for each object of the array*/
 const displayProductItems = function (productArr, startIndex, finalIndex) {
   let displayProducts = productArr.slice(startIndex, finalIndex).map((prod) => {
     return `<div class="gridItem">
@@ -168,16 +210,83 @@ const displayProductItems = function (productArr, startIndex, finalIndex) {
 };
 
 displayProductItems(products, 0, 16);
+
+/*setting bottom links to allow to flip through pages depening on which toplink array is in play at the time*/
+
 BOTTOMLINKS[0].addEventListener("click", function (e) {
   e.preventDefault();
   ADDCLASS(BOTTOMLINKS, 0);
   gridContainer.innerHTML = "";
-  displayProductItems(products, 0, 16);
+  if (TOPLINKS[0].classList.contains("selected")) {
+    displayProductItems(products, 0, 16);
+  } else if (TOPLINKS[1].classList.contains("selected")) {
+    displayProductItems(lowPriceFirstProducts, 0, 16);
+  } else {
+    displayProductItems(highPriceFirstProducts, 0, 16);
+  }
 });
 
 BOTTOMLINKS[1].addEventListener("click", function (e) {
   e.preventDefault();
   ADDCLASS(BOTTOMLINKS, 1);
   gridContainer.innerHTML = "";
-  displayProductItems(products, 16, 32);
+  if (TOPLINKS[0].classList.contains("selected")) {
+    displayProductItems(products, 16, 32);
+  } else if (TOPLINKS[1].classList.contains("selected")) {
+    displayProductItems(lowPriceFirstProducts, 16, 32);
+  } else {
+    displayProductItems(highPriceFirstProducts, 16, 32);
+  }
+});
+
+BOTTOMLINKS[2].addEventListener("click", function (e) {
+  e.preventDefault();
+  ADDCLASS(BOTTOMLINKS, 2);
+  gridContainer.innerHTML = "";
+  if (TOPLINKS[0].classList.contains("selected")) {
+    displayProductItems(products, 32, 48);
+  } else if (TOPLINKS[1].classList.contains("selected")) {
+    displayProductItems(lowPriceFirstProducts, 32, 48);
+  } else {
+    displayProductItems(highPriceFirstProducts, 32, 48);
+  }
+});
+
+BOTTOMLINKS[3].addEventListener("click", function (e) {
+  e.preventDefault();
+  ADDCLASS(BOTTOMLINKS, 3);
+  gridContainer.innerHTML = "";
+  if (TOPLINKS[0].classList.contains("selected")) {
+    displayProductItems(products, 48, 64);
+  } else if (TOPLINKS[1].classList.contains("selected")) {
+    displayProductItems(lowPriceFirstProducts, 48, 64);
+  } else {
+    displayProductItems(highPriceFirstProducts, 48, 64);
+  }
+});
+
+/*setting toplinks to change dynamically added content to one of three sorted arrays*/
+
+TOPLINKS[0].addEventListener("click", function (e) {
+  e.preventDefault();
+  ADDCLASS(TOPLINKS, 0);
+  ADDCLASS(BOTTOMLINKS, 0);
+  gridContainer.innerHTML = "";
+  displayProductItems(products, 0, 16);
+});
+
+TOPLINKS[1].addEventListener("click", function (e) {
+  e.preventDefault();
+  ADDCLASS(TOPLINKS, 1);
+  ADDCLASS(BOTTOMLINKS, 0);
+  gridContainer.innerHTML = "";
+  displayProductItems(lowPriceFirstProducts, 0, 16);
+});
+
+TOPLINKS[2].addEventListener("click", function (e) {
+  e.preventDefault();
+  ADDCLASS(TOPLINKS, 2);
+  ADDCLASS(BOTTOMLINKS, 0);
+  gridContainer.innerHTML = "";
+  displayProductItems(highPriceFirstProducts, 0, 16);
 });
